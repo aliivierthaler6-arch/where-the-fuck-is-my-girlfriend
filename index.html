@@ -10,8 +10,6 @@
 
   <style>
     :root {
-      --bg1:#eddcff;
-      --bg2:#dcc6ff;
       --card-bg: rgba(255,255,255,0.16);
       --ink:#1b1330;
       --ring: rgba(255,255,255,0.45);
@@ -21,18 +19,29 @@
 
     * { box-sizing: border-box; }
     html, body { height: 100%; }
+
+    /* ===== Themes ===== */
     body{
       margin:0;
-      /* Heart wallpaper + gradient */
+      /* Ali'i theme: purple hearts + gradient */
       background:
         url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4.02 4 6.5 4c1.73 0 3.39 1 4.2 2.43C11.51 5 13.17 4 14.9 4 17.38 4 19.4 6 19.4 8.5c0 3.78-3.41 6.86-8.55 11.53L12 21.35z' fill='%23100a22' fill-opacity='0.26'/></svg>") repeat,
-        linear-gradient(160deg,var(--bg1),var(--bg2));
+        linear-gradient(160deg,#eddcff,#dcc6ff);
       background-size: 36px 36px, auto;
+
       color:var(--ink);
       font-family: 'Inika', serif;
       display:grid;
       place-items:center;
       padding:24px;
+    }
+
+    /* Miles theme: red hearts + gradient */
+    body.miles-theme{
+      background:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4.02 4 6.5 4c1.73 0 3.39 1 4.2 2.43C11.51 5 13.17 4 14.9 4 17.38 4 19.4 6 19.4 8.5c0 3.78-3.41 6.86-8.55 11.53L12 21.35z' fill='%236b0f16' fill-opacity='0.28'/></svg>") repeat,
+        linear-gradient(160deg,#ffd6d9,#ffb8bf);
+      background-size: 36px 36px, auto;
     }
 
     /* L-hold: pulse the BACKGROUND hearts 3x, 1s each */
@@ -90,29 +99,51 @@
       font-weight: 400;
     }
 
-    /* TZ toggle */
-    .tz-toggle{
-      position:absolute; top:10px; right:10px;
+    /* Toggles */
+    .toggle{
+      position:absolute;
+      top:10px;
       background: var(--accent);
-      color:#fff; border:none; cursor:pointer;
-      font-weight:700; border-radius:999px;
-      padding:6px 12px; box-shadow:0 8px 18px rgba(0,0,0,.15);
+      color:#fff;
+      border:none;
+      cursor:pointer;
+      font-weight:700;
+      border-radius:999px;
+      padding:6px 12px;
+      box-shadow:0 8px 18px rgba(0,0,0,.15);
       letter-spacing:.2px;
       font-family: 'Inika', serif;
+      z-index: 30;
     }
-    .tz-menu{
-      position:absolute; top:48px; right:10px;
-      background:#fff; color:#1f1236;
-      border-radius:12px; border:2px solid var(--ring);
+    #personToggle{ left:10px; }
+    #tzToggle{ right:10px; }
+
+    .menu{
+      position:absolute;
+      top:48px;
+      background:#fff;
+      color:#1f1236;
+      border-radius:12px;
+      border:2px solid var(--ring);
       box-shadow: var(--shadow);
-      display:none; min-width: 190px; overflow:hidden;
+      display:none;
+      min-width: 210px;
+      overflow:hidden;
       text-align:left;
       font-family: 'Inika', serif;
-      z-index: 20;
+      z-index: 40;
     }
-    .tz-item{ padding:10px 12px; cursor:pointer; font-weight:700; border-bottom:1px solid #00000010; }
-    .tz-item:last-child{ border-bottom:none; }
-    .tz-item:hover{ background:#f3ecff; }
+    #personMenu{ left:10px; }
+    #tzMenu{ right:10px; }
+
+    .menu-item{
+      padding:10px 12px;
+      cursor:pointer;
+      font-weight:700;
+      border-bottom:1px solid #00000010;
+    }
+    .menu-item:last-child{ border-bottom:none; }
+    .menu-item:hover{ background:#f3ecff; }
 
     /* FX overlay for Konami storm */
     .fx-layer{
@@ -148,19 +179,24 @@
 </head>
 <body>
   <div class="wrap" id="widgetRoot" tabindex="0" aria-label="Class widget">
-    <!-- Header card: Title + Day -->
     <div class="card header-card fade">
-      <h1 class="title">Where the fuck is my girlfriend?</h1>
+      <h1 id="titleText" class="title">Where the fuck is my girlfriend?</h1>
       <h2 id="dayLabel">Loading…</h2>
     </div>
 
-    <!-- Main class/status card -->
     <div class="card fade">
-      <!-- TZ toggle -->
-      <button id="tzToggle" class="tz-toggle" aria-haspopup="true" aria-expanded="false">🌴 California</button>
-      <div id="tzMenu" class="tz-menu" role="menu" aria-label="Display timezone">
-        <div class="tz-item" data-tz="CA" role="menuitem">🌴 California</div>
-        <div class="tz-item" data-tz="CHI" role="menuitem">🫘 Chicago</div>
+      <!-- Person toggle -->
+      <button id="personToggle" class="toggle" aria-haspopup="true" aria-expanded="false">✨ Ali’i</button>
+      <div id="personMenu" class="menu" role="menu" aria-label="Whose schedule">
+        <div class="menu-item" data-person="ALII" role="menuitem">✨ Ali’i</div>
+        <div class="menu-item" data-person="MILES" role="menuitem">👑 Miles</div>
+      </div>
+
+      <!-- Display TZ toggle -->
+      <button id="tzToggle" class="toggle" aria-haspopup="true" aria-expanded="false">🌴 California</button>
+      <div id="tzMenu" class="menu" role="menu" aria-label="Display timezone">
+        <div class="menu-item" data-tz="CA" role="menuitem">🌴 California</div>
+        <div class="menu-item" data-tz="CHI" role="menuitem">🫘 Chicago</div>
       </div>
 
       <div id="status" class="big">Loading…</div>
@@ -170,41 +206,72 @@
   </div>
 
   <script>
-    /* ===== Schedule (anchored to California) ===== */
-    const schedule = {
-      1: [
-        { name: "Chemistry",           start: "10:00", end: "10:50" },
-        { name: "Intro to Psychology", start: "11:00", end: "12:15" },
-        { name: "Uncanny",             start: "13:15", end: "14:30" },
-      ],
-      2: [ { name: "Reasoning bout Unreasonable", start: "11:00", end: "12:15" } ],
-      3: [
-        { name: "Chemistry",           start: "10:00", end: "10:50" },
-        { name: "Intro to Psychology", start: "11:00", end: "12:15" },
-        { name: "Uncanny",             start: "13:15", end: "14:30" },
-      ],
-      4: [
-        { name: "Reasoning bout Unreasonable", start: "11:00", end: "12:15" },
-        { name: "Chem Lab",                     start: "13:00", end: "16:00" },
-      ],
-      5: [ { name: "Chemistry", start: "10:00", end: "10:50" } ],
-      0: [], 6: []
+    /* =========================
+       Schedules
+       0=Sun 1=Mon 2=Tue 3=Wed 4=Thu 5=Fri 6=Sat
+       ========================= */
+
+    const PEOPLE = {
+      ALII: {
+        label: "✨ Ali’i",
+        logicTZ: "America/Los_Angeles",
+        schedule: {
+          1: [ // Monday
+            { name: "Intro to Art",                start: "10:00", end: "12:30" },
+            { name: "Political Thought East&West", start: "13:15", end: "14:30" },
+          ],
+          2: [ // Tuesday
+            { name: "Social Justice in the U.S.",  start: "13:15", end: "14:30" },
+          ],
+          3: [ // Wednesday
+            { name: "Intro to Art",                start: "10:00", end: "12:30" },
+            { name: "Political Thought East&West", start: "13:15", end: "14:30" },
+            { name: "Perspectives on Contemporary Art", start: "14:45", end: "17:30" },
+          ],
+          4: [ // Thursday
+            { name: "Social Justice in the U.S.",  start: "13:15", end: "14:30" },
+          ],
+          5: [],
+          0: [], 6: []
+        }
+      },
+      MILES: {
+        label: "👑 Miles",
+        logicTZ: "America/Chicago",
+        schedule: {
+          1: [ // Monday
+            { name: "Readings in World Literature II", start: "13:30", end: "14:50" },
+          ],
+          2: [ // Tuesday
+            { name: "Principles of Macro-Economics",   start: "15:30", end: "16:50" },
+          ],
+          3: [ // Wednesday
+            { name: "Readings in World Literature II", start: "13:30", end: "14:50" },
+            { name: "Principles of Macro-Economics",   start: "19:30", end: "20:20" },
+          ],
+          4: [ // Thursday
+            { name: "Principles of Macro-Economics",   start: "15:30", end: "16:50" },
+          ],
+          5: [ // Friday
+            { name: "Media Art and Design Practice",   start: "12:30", end: "15:20" },
+          ],
+          0: [], 6: []
+        }
+      }
     };
 
-    const lockedBase = "She's locked asf";
-    const BASE_TZ = "America/Los_Angeles";
-
-    // Display timezones (labels + offsets from California wall time)
+    // Display timezones (DST-safe, real tz handling)
     const DISPLAY_OPTS = {
-      CA: { label: "🌴 California", tz: "America/Los_Angeles", offsetMinutesFromCA: 0 },
-      CHI:{ label: "🫘 Chicago",    tz: "America/Chicago",     offsetMinutesFromCA: 120 }, // PT -> CT = +2h
+      CA:  { label: "🌴 California", tz: "America/Los_Angeles" },
+      CHI: { label: "🫘 Chicago",    tz: "America/Chicago" },
     };
-    let displayKey = localStorage.getItem("displayTZ") || "CA";
+
+    let activePerson = localStorage.getItem("activePerson") || "ALII";
+    let displayKey   = localStorage.getItem("displayTZ") || "CA";
 
     // ---------- Helpers ----------
     function toMinutes(hhmm){ const [h,m]=hhmm.split(":").map(Number); return h*60+m; }
-    function pad(n){ return n.toString().padStart(2,"0"); }
-    function fmt12(h24,m){ const am=h24<12; const h12=((h24+11)%12)+1; return `${h12}:${pad(m)} ${am?"AM":"PM"}`; }
+    function minutesSinceMidnight(d){ return d.getHours()*60 + d.getMinutes(); }
 
     function nowInTZ(tz){
       const fmt = new Intl.DateTimeFormat("en-US", {
@@ -214,29 +281,68 @@
       const p = Object.fromEntries(fmt.formatToParts(new Date()).map(x=>[x.type,x.value]));
       return new Date(`${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}:${p.second}`);
     }
-    function minutesSinceMidnight(d){ return d.getHours()*60 + d.getMinutes(); }
 
-    // Convert a California wall-time "HH:MM" to selected display zone via fixed offset
-    function convertFromCA(hhmm){
-      const mins = toMinutes(hhmm) + DISPLAY_OPTS[displayKey].offsetMinutesFromCA;
-      const norm = ((mins % 1440) + 1440) % 1440;
-      const h = Math.floor(norm/60), m = norm % 60;
-      return fmt12(h,m);
-    }
-    function fmtRangeDisplay(startHHMM,endHHMM){ return `${convertFromCA(startHHMM)} – ${convertFromCA(endHHMM)}`; }
-
-    // Emojis for classes
-    function decorate(name){
-      if (/^Chemistry$/i.test(name)) return "🧬 Chemistry";
-      if (/^Chem Lab$/i.test(name)) return "🧪 Chem Lab";
-      if (/^Intro to Psychology$/i.test(name)) return "🧠 Intro to Psychology";
-      if (/^Uncanny$/i.test(name)) return "👁️‍🗨️ Uncanny";
-      if (/^Reasoning/i.test(name)) return "🐔 Reasoning ’bout Unreasonable";
-      return name;
+    // --- DST-safe conversion from a wall-time in a "logic tz" to display tz ---
+    function tzParts(date, tz) {
+      const fmt = new Intl.DateTimeFormat("en-US", {
+        timeZone: tz,
+        year: "numeric", month: "2-digit", day: "2-digit",
+        hour: "2-digit", minute: "2-digit", second: "2-digit",
+        hour12: false
+      });
+      const p = Object.fromEntries(fmt.formatToParts(date).map(x => [x.type, x.value]));
+      return { year: Number(p.year), month: Number(p.month), day: Number(p.day) };
     }
 
-    function currentBlockForCA(dayIndex, minutes){
-      const blocks = schedule[dayIndex] || [];
+    function tzOffsetMinutes(tz, date = new Date()) {
+      const parts = new Intl.DateTimeFormat("en-US", {
+        timeZone: tz,
+        timeZoneName: "shortOffset",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false
+      }).formatToParts(date);
+
+      const tzn = parts.find(p => p.type === "timeZoneName")?.value || "GMT+00:00";
+      const m = tzn.match(/GMT([+-])(\d{1,2})(?::?(\d{2}))?/);
+      if (!m) return 0;
+
+      const sign = m[1] === "-" ? -1 : 1;
+      const hh = Number(m[2]);
+      const mm = Number(m[3] || "0");
+      return sign * (hh * 60 + mm);
+    }
+
+    function instantFromWallTimeToday(logicTZ, hhmm) {
+      const today = tzParts(new Date(), logicTZ);
+      const [hh, mm] = hhmm.split(":").map(Number);
+
+      // Use offset at midday of that local date to avoid edge weirdness.
+      const middayUTC = Date.UTC(today.year, today.month - 1, today.day, 12, 0, 0);
+      const offset = tzOffsetMinutes(logicTZ, new Date(middayUTC));
+
+      const utcMillis = Date.UTC(today.year, today.month - 1, today.day, hh, mm, 0) - offset * 60_000;
+      return new Date(utcMillis);
+    }
+
+    function fmtInTZ(date, tz) {
+      return new Intl.DateTimeFormat("en-US", {
+        timeZone: tz,
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true
+      }).format(date);
+    }
+
+    function fmtRangeDisplay(startHHMM, endHHMM, logicTZ) {
+      const dispTZ = DISPLAY_OPTS[displayKey].tz;
+      const s = instantFromWallTimeToday(logicTZ, startHHMM);
+      const e = instantFromWallTimeToday(logicTZ, endHHMM);
+      return `${fmtInTZ(s, dispTZ)} – ${fmtInTZ(e, dispTZ)}`;
+    }
+
+    function currentBlockForSchedule(sched, dayIndex, minutes){
+      const blocks = sched[dayIndex] || [];
       for (const b of blocks){
         const s = toMinutes(b.start), e = toMinutes(b.end);
         if (minutes >= s && minutes < e) return b;
@@ -244,37 +350,93 @@
       return null;
     }
 
+    // Emojis for classes
+    function decorate(name){
+      if (/Intro to Art/i.test(name)) return "🎨 Intro to Art";
+      if (/Political Thought/i.test(name)) return "📜 Political Thought East&West";
+      if (/Social Justice/i.test(name)) return "✊ Social Justice in the U.S.";
+      if (/Perspectives on Contemporary Art/i.test(name)) return "🖼️ Perspectives on Contemporary Art";
+
+      if (/Macro/i.test(name)) return "📈 Principles of Macro-Economics";
+      if (/World Literature/i.test(name)) return "📚 Readings in World Literature II";
+      if (/Media Art/i.test(name)) return "🧩 Media Art and Design Practice";
+
+      return name;
+    }
+
     // ---------- DOM ----------
-    const root      = document.getElementById("widgetRoot");
-    const dayLabelEl= document.getElementById("dayLabel");
-    const statusEl  = document.getElementById("status");
-    const rangeEl   = document.getElementById("range");
-    const clockEl   = document.getElementById("clock");
-    const tzToggle  = document.getElementById("tzToggle");
-    const tzMenu    = document.getElementById("tzMenu");
+    const root        = document.getElementById("widgetRoot");
+    const titleEl     = document.getElementById("titleText");
+    const dayLabelEl  = document.getElementById("dayLabel");
+    const statusEl    = document.getElementById("status");
+    const rangeEl     = document.getElementById("range");
+    const clockEl     = document.getElementById("clock");
+
+    const tzToggle    = document.getElementById("tzToggle");
+    const tzMenu      = document.getElementById("tzMenu");
+    const personToggle= document.getElementById("personToggle");
+    const personMenu  = document.getElementById("personMenu");
+
+    function setMenu(menuEl, show){
+      menuEl.style.display = show ? "block" : "none";
+    }
+
+    function applyThemeAndTitle(){
+      if (activePerson === "MILES") {
+        document.body.classList.add("miles-theme");
+        titleEl.textContent = "Where the Fuck is my Boyfriend?";
+      } else {
+        document.body.classList.remove("miles-theme");
+        titleEl.textContent = "Where the fuck is my girlfriend?";
+      }
+    }
 
     function updateToggleUI(){
       tzToggle.textContent = DISPLAY_OPTS[displayKey].label;
+      personToggle.textContent = PEOPLE[activePerson].label;
       tzToggle.setAttribute("aria-expanded", tzMenu.style.display === "block");
+      personToggle.setAttribute("aria-expanded", personMenu.style.display === "block");
+      applyThemeAndTitle();
     }
-    function openMenu(show){
-      tzMenu.style.display = show ? "block" : "none";
+
+    tzToggle.addEventListener("click", () => {
+      setMenu(tzMenu, tzMenu.style.display !== "block");
+      setMenu(personMenu, false);
       updateToggleUI();
-    }
-    tzToggle.addEventListener("click", () => openMenu(tzMenu.style.display !== "block"));
+    });
     tzMenu.addEventListener("click", (e) => {
-      const item = e.target.closest(".tz-item");
+      const item = e.target.closest(".menu-item");
       if(!item) return;
       displayKey = item.dataset.tz;
       localStorage.setItem("displayTZ", displayKey);
-      openMenu(false);
+      setMenu(tzMenu, false);
+      updateToggleUI();
       update();
     });
-    document.addEventListener("click", (e) => {
-      if (!tzMenu.contains(e.target) && e.target !== tzToggle) openMenu(false);
+
+    personToggle.addEventListener("click", () => {
+      setMenu(personMenu, personMenu.style.display !== "block");
+      setMenu(tzMenu, false);
+      updateToggleUI();
+    });
+    personMenu.addEventListener("click", (e) => {
+      const item = e.target.closest(".menu-item");
+      if(!item) return;
+      activePerson = item.dataset.person;
+      localStorage.setItem("activePerson", activePerson);
+      setMenu(personMenu, false);
+      updateToggleUI();
+      update();
     });
 
-    // ---------- Locked quip rotation ----------
+    document.addEventListener("click", (e) => {
+      if (!tzMenu.contains(e.target) && e.target !== tzToggle) setMenu(tzMenu, false);
+      if (!personMenu.contains(e.target) && e.target !== personToggle) setMenu(personMenu, false);
+      updateToggleUI();
+    });
+
+    // ---------- Ali’i locked quip rotation (ONLY when Ali’i is not in class) ----------
+    const lockedBase = "She's locked asf";
     const LOCKED_QUIPS = [
       "IDK but did you know Tame Impala is only one guy?!",
       "Probably not her homework.",
@@ -297,58 +459,69 @@
       "She’s hitting her vape in the bathroom",
       "Explaining the entire timeline of how they caught Osama Bin Laden."
     ];
-    let lockedIndex = -1; // -1 = base phrase; otherwise index in LOCKED_QUIPS
-    let isLockedNow = false;
+    let lockedIndex = -1;
+    let isAliiLockedNow = false;
 
     statusEl.addEventListener("click", () => {
-      if (!isLockedNow) return; // only rotate when locked
+      if (!(activePerson === "ALII" && isAliiLockedNow)) return;
       lockedIndex++;
-      if (lockedIndex >= LOCKED_QUIPS.length) lockedIndex = -1; // loop back to base phrase
-      renderLockedLine();
+      if (lockedIndex >= LOCKED_QUIPS.length) lockedIndex = -1;
+      renderAliiLockedLine();
     });
 
-    function renderLockedLine(){
+    function renderAliiLockedLine(){
       statusEl.classList.add("clickable");
-      if (lockedIndex === -1) {
-        statusEl.textContent = "She's locked asf";
-      } else {
-        statusEl.textContent = LOCKED_QUIPS[lockedIndex];
-      }
+      statusEl.textContent = (lockedIndex === -1) ? lockedBase : LOCKED_QUIPS[lockedIndex];
     }
 
     // ---------- Main update ----------
     function update(){
-      // Logic time: California
-      const nowCA = nowInTZ(BASE_TZ);
-      const dayIndexCA = nowCA.getDay();
-      const minsCA = minutesSinceMidnight(nowCA);
+      const person = PEOPLE[activePerson];
 
-      // Day label + live clock in selected display zone
+      // Logic time anchored to the active person’s timezone
+      const nowLogic = nowInTZ(person.logicTZ);
+      const dayIndex = nowLogic.getDay();
+      const mins     = minutesSinceMidnight(nowLogic);
+
+      // Day label + live clock in selected display timezone
       const dispTZ = DISPLAY_OPTS[displayKey].tz;
       dayLabelEl.textContent = new Intl.DateTimeFormat("en-US", { weekday:"long", timeZone: dispTZ }).format(new Date());
       clockEl.textContent = new Intl.DateTimeFormat("en-US", {
         timeZone: dispTZ, hour:"2-digit", minute:"2-digit", second:"2-digit", hour12:true
       }).format(new Date());
 
-      // Determine class state (logic in CA)
-      const blocks = schedule[dayIndexCA] || [];
-      const block  = currentBlockForCA(dayIndexCA, minsCA);
+      const blocks = person.schedule[dayIndex] || [];
+      const block  = currentBlockForSchedule(person.schedule, dayIndex, mins);
 
       if (block){
-        isLockedNow = false;
+        // In class
+        isAliiLockedNow = false;
         statusEl.classList.remove("clickable");
         statusEl.textContent = decorate(block.name);
-        rangeEl.textContent  = `${fmtRangeDisplay(block.start, block.end)} (${DISPLAY_OPTS[displayKey].label})`;
-      } else {
-        isLockedNow = true;
-        renderLockedLine();
+        rangeEl.textContent  = `${fmtRangeDisplay(block.start, block.end, person.logicTZ)} (${DISPLAY_OPTS[displayKey].label})`;
 
-        // Next class later today?
-        const next = blocks.find(b => minsCA < toMinutes(b.start));
+        if (activePerson === "ALII") lockedIndex = -1;
+
+      } else {
+        // Not in class
+        statusEl.classList.remove("clickable");
+
+        if (activePerson === "MILES") {
+          isAliiLockedNow = false;
+          statusEl.textContent = "Not in Class right now";
+          rangeEl.textContent = "";
+          return;
+        }
+
+        // Ali’i not in class: keep the locked baseline + rotating quips
+        isAliiLockedNow = true;
+        renderAliiLockedLine();
+
+        const next = blocks.find(b => mins < toMinutes(b.start));
         if (next){
-          rangeEl.textContent  = `Next Class: ${decorate(next.name)} • ${fmtRangeDisplay(next.start, next.end)} (${DISPLAY_OPTS[displayKey].label})`;
+          rangeEl.textContent = `Next Class: ${decorate(next.name)} • ${fmtRangeDisplay(next.start, next.end, person.logicTZ)} (${DISPLAY_OPTS[displayKey].label})`;
         } else {
-          rangeEl.textContent  = ""; // after last class or weekend: just locked
+          rangeEl.textContent = "";
         }
       }
     }
@@ -368,7 +541,7 @@
     root.addEventListener("pointerdown", ()=>{
       tapActive = true;
       clearTimeout(tapTimer);
-      tapTimer = setTimeout(()=>{ tapActive = false; }, 8000); // 8s grace after tap/focus
+      tapTimer = setTimeout(()=>{ tapActive = false; }, 8000);
     });
     root.addEventListener("focusin", ()=>{
       tapActive = true;
@@ -377,18 +550,14 @@
     });
     function widgetActive(){ return isHovering || tapActive; }
 
-    // Konami sequence
     const KONAMI = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","b","a"];
     const KONAMI_KEYS = new Set(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","b","a"]);
     let buffer = [];
 
-    // CAPTURING listener: tries to swallow Konami keys while widget is active
     window.addEventListener("keydown", (e) => {
-      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
       const normalized = (e.key.length === 1 ? e.key.toLowerCase() : e.key);
 
       if (widgetActive() && KONAMI_KEYS.has(normalized)) {
-        // stop other scripts (and many extensions) from seeing these keys
         e.stopImmediatePropagation?.();
         e.stopPropagation();
         e.preventDefault();
@@ -396,10 +565,8 @@
 
       if (!widgetActive()) return;
 
-      // L-hold start
-      if (key === "l") handleLHoldStart();
+      if (normalized === "l") handleLHoldStart();
 
-      // track sequence
       buffer.push(normalized);
       if (buffer.length > KONAMI.length) buffer.shift();
 
@@ -409,15 +576,14 @@
       });
       if (match) {
         triggerKissStorm();
-        buffer = []; // reset
+        buffer = [];
       }
-    }, true); // <-- capture
+    }, true);
 
     window.addEventListener("keyup", (e)=>{
       if (e.key.toLowerCase() === "l") handleLHoldEnd();
-    }, true); // capture to swallow if needed
+    }, true);
 
-    // ----- L hold for 3s -> pulse BACKGROUND hearts 3x (1s each)
     let lHoldTimer = null;
     let lHolding = false;
     function handleLHoldStart(){
@@ -430,14 +596,13 @@
           setTimeout(()=>document.body.classList.remove("hearts-pulse"), 3200);
         }
         lHolding = false;
-      }, 3000); // hold L for 3 seconds
+      }, 3000);
     }
     function handleLHoldEnd(){
       clearTimeout(lHoldTimer);
       lHolding = false;
     }
 
-    // ----- Continuous kiss/heart storm for 5s
     function triggerKissStorm(){
       const layer = document.createElement("div");
       layer.className = "fx-layer";
@@ -450,18 +615,18 @@
       const vw = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
 
       const tick = () => {
-        const burstCount = 12 + Math.floor(Math.random()*10); // 12–21 per burst
+        const burstCount = 12 + Math.floor(Math.random()*10);
         for (let i=0;i<burstCount;i++){
           const span = document.createElement("span");
           span.className = "kiss";
           span.textContent = EMOJIS[Math.random()<0.65 ? 0 : 1];
 
           const left = Math.random()*vw;
-          const size = 16 + Math.random()*28; // 16–44px
+          const size = 16 + Math.random()*28;
           const delay = Math.random()*0.25;
           const drift = (Math.random()*200 - 100) + "px";
           const rot   = (Math.random()*360 - 180) + "deg";
-          const fallDur = (3.8 + Math.random()*1.8).toFixed(2) + "s"; // 3.8–5.6s
+          const fallDur = (3.8 + Math.random()*1.8).toFixed(2) + "s";
 
           span.style.left = left + "px";
           span.style.fontSize = size + "px";
@@ -474,7 +639,7 @@
         }
 
         if (Date.now() - start < duration){
-          stormTimer = setTimeout(tick, 140 + Math.random()*120); // ~8–10 bursts/sec
+          stormTimer = setTimeout(tick, 140 + Math.random()*120);
         }
       };
 
@@ -488,6 +653,4 @@
   </script>
 </body>
 </html>
-
-
 
