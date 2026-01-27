@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -36,14 +36,13 @@
       padding:24px;
     }
 
-    /* Miles theme: red hearts + gradient */
-  body.miles-theme{
-  background:
-    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4.02 4 6.5 4c1.73 0 3.39 1 4.2 2.43C11.51 5 13.17 4 14.9 4 17.38 4 19.4 6 19.4 8.5c0 3.78-3.41 6.86-8.55 11.53L12 21.35z' fill='%238a1f5c' fill-opacity='0.26'/></svg>") repeat,
-    linear-gradient(160deg,#ffe4ef,#f6c1dc);
-  background-size: 36px 36px, auto;
-}
-
+    /* Miles theme: pink pastel hearts + gradient */
+    body.miles-theme{
+      background:
+        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='36' height='36' viewBox='0 0 24 24'><path d='M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4.02 4 6.5 4c1.73 0 3.39 1 4.2 2.43C11.51 5 13.17 4 14.9 4 17.38 4 19.4 6 19.4 8.5c0 3.78-3.41 6.86-8.55 11.53L12 21.35z' fill='%238a1f5c' fill-opacity='0.26'/></svg>") repeat,
+        linear-gradient(160deg,#ffe4ef,#f6c1dc);
+      background-size: 36px 36px, auto;
+    }
 
     /* L-hold: pulse the BACKGROUND hearts 3x, 1s each */
     body.hearts-pulse { animation: heartsPulse 1s ease-in-out 3; }
@@ -218,19 +217,19 @@
         logicTZ: "America/Los_Angeles",
         schedule: {
           1: [ // Monday
-            { name: "Intro to Art",                start: "10:00", end: "12:30" },
+            { name: "Intro to Art",                start: "10:00", end: "12:00" },
             { name: "Political Thought East&West", start: "13:15", end: "14:30" },
           ],
           2: [ // Tuesday
-            { name: "Social Justice in the U.S.",  start: "13:15", end: "14:30" },
+            { name: "Philosophical Questions",     start: "11:00", end: "12:15" },
           ],
           3: [ // Wednesday
-            { name: "Intro to Art",                start: "10:00", end: "12:30" },
+            { name: "Intro to Art",                start: "10:00", end: "12:00" },
             { name: "Political Thought East&West", start: "13:15", end: "14:30" },
             { name: "Perspectives on Contemporary Art", start: "14:45", end: "17:30" },
           ],
           4: [ // Thursday
-            { name: "Social Justice in the U.S.",  start: "13:15", end: "14:30" },
+            { name: "Philosophical Questions",     start: "11:00", end: "12:15" },
           ],
           5: [],
           0: [], 6: []
@@ -355,7 +354,7 @@
     function decorate(name){
       if (/Intro to Art/i.test(name)) return "🎨 Intro to Art";
       if (/Political Thought/i.test(name)) return "📜 Political Thought East&West";
-      if (/Social Justice/i.test(name)) return "✊ Social Justice in the U.S.";
+      if (/Philosophical Questions/i.test(name)) return "❓ Philosophical Questions";
       if (/Perspectives on Contemporary Art/i.test(name)) return "🖼️ Perspectives on Contemporary Art";
 
       if (/Macro/i.test(name)) return "📈 Principles of Macro-Economics";
@@ -654,4 +653,3 @@
   </script>
 </body>
 </html>
-
